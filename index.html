@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+<body>
+
+<p>Suggerimenti: <ul id="suggestionsList"></ul></p>
+<p>Scrivi qui: <input type="text" id="txt_input" onkeyup="showHint(this.value)"></p>
+
+<script>
+    function showHint(queryparam) {
+        const xhttp = new XMLHttpRequest();
+        xhttp.responseType = "json";
+        xhttp.onload = function() {
+            if(this.readyState ==4){
+                const responseArray = this.response;
+                console.log("Inviato:", queryparam);
+                console.log("Risposta ricevuta:", responseArray);
+                const suggestionsList = document.getElementById("suggestionsList");
+                suggestionsList.innerHTML = "";
+                responseArray.forEach(function(suggestion) {
+                    const li = document.createElement("li");
+                    li.textContent = suggestion['parola'];
+                    suggestionsList.appendChild(li);
+                });
+            }
+        }
+        xhttp.open("GET", "getsuggestions.php?parola=" + queryparam);
+        xhttp.send();
+    }
+</script>
+</body>
+</html>
